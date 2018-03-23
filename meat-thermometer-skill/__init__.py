@@ -38,6 +38,7 @@ class MeatThermometerSkill(MycroftSkill):
 
     # The constructor of the skill, which calls MycroftSkill's constructor
     def __init__(self):
+        self.count = 0
         super(MeatThermometerSkill, self).__init__(name="MeatThermometerSkill")
 
     # The "handle_xxxx_intent" function is triggered by Mycroft when the
@@ -64,7 +65,7 @@ class MeatThermometerSkill(MycroftSkill):
             self.count += 1
         else:  # assume "down"
             self.count -= 1
-        self.speak_dialog("cooking.temperature.is.dialog", data={"count": self.count})
+        self.speak_dialog("count.is.now.dialog", data={"count": self.count})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
@@ -78,4 +79,4 @@ class MeatThermometerSkill(MycroftSkill):
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
 def create_skill():
-    return TemplateSkill()
+    return MeatThermometerSkill()
