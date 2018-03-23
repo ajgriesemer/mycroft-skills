@@ -40,12 +40,15 @@ class MeatThermometerSkill(MycroftSkill):
     def __init__(self):
         super(MeatThermometerSkill, self).__init__(name="MeatThermometerSkill")
 
-    @intent_handler(IntentBuilder("").require("Temperature").require("Meat"))
+    @intent_handler(IntentBuilder("").require("Temperature").require("Meat").optionally("Ground"))
     def handle_count_intent(self, message):
-        meat = message.data["Temperature"]
+        meat = message.data["Meat"]
 
-        if message.data["Temperature"] == "turkey":
-            temperature = 175
+        if message.data["Meat"] == "turkey":
+            if message.data.get("TheUserLocation") is not None:
+                temperature = 175
+            else
+                temperature = 190
         else:  # assume "down"
             temperature = 165
         self.speak_dialog("cooking.temperature.is", data={"temperature": temperature, "meat": meat})
