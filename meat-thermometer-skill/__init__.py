@@ -65,7 +65,7 @@ class MeatThermometerSkill(MycroftSkill):
             self.count += 1
         else:  # assume "down"
             self.count -= 1
-        self.speak_dialog("count.is.now.dialog", data={"count": self.count})
+        self.speak_dialog("cooking.temperature.is", data={"count": self.count})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
