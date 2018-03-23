@@ -1,2 +1,2 @@
-Meat should be cooked to {{temperature}} degrees
-You should cook meat to {{temperature}} degrees
+{{meat}} should be cooked to {{temperature}} degrees
+You should cook {{meat}} to {{temperature}} degrees

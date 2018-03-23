@@ -42,11 +42,13 @@ class MeatThermometerSkill(MycroftSkill):
 
     @intent_handler(IntentBuilder("").require("Temperature").require("Meat"))
     def handle_count_intent(self, message):
+        meat = message.data["Temperature"]
+
         if message.data["Temperature"] == "turkey":
             temperature = 175
         else:  # assume "down"
             temperature = 165
-        self.speak_dialog("cooking.temperature.is", data={"temperature": temperature})
+        self.speak_dialog("cooking.temperature.is", data={"temperature": temperature, "meat": meat})
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
