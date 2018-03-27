@@ -31,8 +31,6 @@ from adapt.intent import IntentBuilder
 from mycroft.skills.core import MycroftSkill, intent_handler
 from mycroft.util.log import LOG
 
-# Each skill is contained within its own class, which inherits base methods
-# from the MycroftSkill class.  You extend this class as shown below.
 
 class MeatThermometerSkill(MycroftSkill):
 
@@ -40,18 +38,45 @@ class MeatThermometerSkill(MycroftSkill):
     def __init__(self):
         super(MeatThermometerSkill, self).__init__(name="MeatThermometerSkill")
 
-    @intent_handler(IntentBuilder("").require("Temperature").require("Meat").optionally("Ground"))
+    @intent_handler(IntentBuilder("").require("Temperature").require("Cook").require("Meat").optionally("Modifier"))
     def handle_count_intent(self, message):
         meat = message.data["Meat"]
+        if message.data.get("Modifier") is None:
+            modifier = ""
+        else:
+            modifier = message.data.get("Modifier")
 
-        if message.data["Meat"] == "turkey":
-            if message.data.get("TheUserLocation") is not None:
-                temperature = 175
-            else
-                temperature = 190
-        else:  # assume "down"
+        if (meat == "turkey") or \
+                (meat == "chicken") or \
+                (meat == "poultry"):
             temperature = 165
-        self.speak_dialog("cooking.temperature.is", data={"temperature": temperature, "meat": meat})
+            self.speak_dialog("cooking.temperature.is",
+                              data={"temperature": temperature, "meat": meat, "modifier": modifier})
+            return
+
+        elif (meat == "beef") or \
+                (meat == "steak"):
+            if modifier is "":
+                temperature = 145
+            elif modifier == "ground":
+                temperature = 160
+            elif modifier == "rare":
+                temperature = 135
+            elif modifier == "medium rare":
+                temperature = 140
+            elif modifier == "medium":
+                temperature = 155
+            elif modifier == "well done":
+                temperature = 165
+            else:
+                temperature = 0
+            self.speak_dialog("cooking.temperature.with.rest",
+                              data={"temperature": temperature, "meat": meat, "modifier": modifier})
+            return
+
+        else:
+            self.speak_dialog("do.not.know.cooking.temperature", data={"meat": meat})
+            return
 
     # The "stop" method defines what Mycroft does when told to stop during
     # the skill's execution. In this case, since the skill's functionality
@@ -61,6 +86,7 @@ class MeatThermometerSkill(MycroftSkill):
     #
     # def stop(self):
     #    return False
+
 
 # The "create_skill()" method is used to create an instance of the skill.
 # Note that it's outside the class itself.
