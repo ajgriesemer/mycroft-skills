@@ -68,10 +68,20 @@ class MeatThermometerSkill(MycroftSkill):
                 temperature = 155
             elif modifier == "well done":
                 temperature = 165
-            else:
-                temperature = 0
             self.speak_dialog("cooking.temperature.with.rest",
                               data={"temperature": temperature, "meat": meat, "modifier": modifier})
+            return
+
+        elif (meat == "fish") or \
+                (meat == "tuna") or \
+                (meat == "salmon") or \
+                (meat == "shell fish") or \
+                (meat == "clams") or \
+                (meat == "scallop") or \
+                (meat == "crab"):
+            temperature = 145
+            self.speak_dialog("cooking.temperature.is",
+                              data={"temperature": temperature, "meat": meat, "modifier": ""})
             return
 
         else:
